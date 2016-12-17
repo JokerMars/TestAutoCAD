@@ -36,6 +36,9 @@
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TestAutoCAD.rc" />
+    <ClCompile Include="Close.c" />
+    <ClCompile Include="Common.c" />
+    <ClCompile Include="Create.c" />
     <ClCompile Include="TestAutoCAD.c" />
     <Inf Include="TestAutoCAD.inf" />
   </ItemGroup>
@@ -151,6 +154,9 @@
     <Link>
       <AdditionalDependencies>fltmgr.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+    </ClCompile>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Link>
@@ -179,6 +185,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <FilesToPackage Include="$(TargetPath)" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CallbackRoutines.h" />
+    <ClInclude Include="Common.h" />
+    <ClInclude Include="TestAutoCAD.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
