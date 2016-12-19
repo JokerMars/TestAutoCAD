@@ -36,6 +36,15 @@
     <ClCompile Include="Close.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cleanup.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="QueryInfo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Ctx.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TestAutoCAD.rc">
@@ -50,6 +59,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="CallbackRoutines.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Ctx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

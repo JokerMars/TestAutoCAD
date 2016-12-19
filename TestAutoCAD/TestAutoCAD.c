@@ -48,9 +48,36 @@ CONST FLT_OPERATION_REGISTRATION Callbacks[] = {
 		NULL
 	},
 
+	{
+		IRP_MJ_CLEANUP,
+		FLTFL_OPERATION_REGISTRATION_SKIP_PAGING_IO,
+		PreCleanup,
+		NULL
+	},
+
+	/*{
+		IRP_MJ_QUERY_INFORMATION,
+		0,
+		PreQueryInfo,
+		PostQueryInfo
+	},*/
 
 
     { IRP_MJ_OPERATION_END }
+};
+
+
+CONST FLT_CONTEXT_REGISTRATION Context_Array[] = {
+
+	{
+		FLT_STREAM_CONTEXT,
+		0,
+		CleanupContext,
+		sizeof(STREAM_CONTEXT),
+		STREAM_CONTEXT_TAG
+	},
+
+	{FLT_CONTEXT_END}
 };
 
 //
@@ -63,7 +90,7 @@ CONST FLT_REGISTRATION FilterRegistration = {
     FLT_REGISTRATION_VERSION,           //  Version
     0,                                  //  Flags
 
-    NULL,                               //  Context
+    Context_Array,                               //  Context
     Callbacks,                          //  Operation callbacks
 
     TestAutoCADUnload,                           //  MiniFilterUnload

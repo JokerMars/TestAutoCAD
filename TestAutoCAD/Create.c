@@ -1,6 +1,6 @@
 #include "CallbackRoutines.h"
 
-static int cnt = 1;
+static int cnt = 0;
 
 
 FLT_PREOP_CALLBACK_STATUS
@@ -26,70 +26,59 @@ PostCreate(
 	_In_ FLT_POST_OPERATION_FLAGS Flags
 )
 {
-	BOOLEAN isDir = FALSE;
+
+	BOOLEAN isMonitored = FALSE;
 	NTSTATUS status;
-	PFLT_FILE_NAME_INFORMATION pfNameInfo = NULL;
+	PSTREAM_CONTEXT pStreamCtx = NULL;
+	BOOLEAN bNewCreated = FALSE;
+	KIRQL oldIrql;
 
 	try
 	{
+		isMonitored = IsFilteredFileProcess(Data, FltObjects);
+		if (!isMonitored)
+		{
+			leave;
+		}
+
+		DbgPrint("PostCreate: %d\n", cnt++);
+		
 		//
-		// we don't need to monitor the directory
+		// find the stream context, if not, then create a new one
 		//
 
-		status = FltIsDirectory(FltObjects->FileObject, FltObjects->Instance, &isDir);
-		if (isDir)
+		status = Ctx_FindOrCreateStreamContext(Data, FltObjects, TRUE, &pStreamCtx, &bNewCreated);
+		if (!NT_SUCCESS(status))
 		{
 			leave;
 		}
 
 		//
-		// only autocad process can go down
+		// if the stream context exist, then increase the reference
 		//
 
-		PCHAR procName = GetProcessName();
-		if (strncmp(procName, "acad.exe", strlen("acad.exe")) != 0)
+		if (!bNewCreated)
 		{
+			SC_LOCK(pStreamCtx, &oldIrql);
+
+			pStreamCtx->refCount++;
+			DbgPrint("PostCreate RefCount: %d\n", pStreamCtx->refCount);
+
+			SC_UNLOCK(pStreamCtx, oldIrql);
 			leave;
 		}
 
-		//
-		// get the file name we are visiting currently
-		//
-
-		status = FltGetFileNameInformation(Data,
-			FLT_FILE_NAME_NORMALIZED | FLT_FILE_NAME_QUERY_DEFAULT,
-			&pfNameInfo);
-		if (!NT_SUCCESS(status) || pfNameInfo == NULL)
-		{
-			leave;
-		}
-		FltParseFileNameInformation(pfNameInfo);
-
-		//
-		// we filter the dwg file type, don't care other's file type
-		//
-
-		UNICODE_STRING ext = { 0 };
-		RtlInitUnicodeString(&ext, L"dwg");
-		if (RtlCompareUnicodeString(&ext, &(pfNameInfo->Extension), TRUE) != 0)
-		{
-			leave;
-		}
-
-		DbgPrint("Process: %s\n", procName);
-		DbgPrint("File Name: %wZ\n", &(pfNameInfo->Name));
-		DbgPrint("File Extension: %wZ\n", &(pfNameInfo->Extension));
-		DbgPrint("Cnt: %d\n", cnt++);
+		pStreamCtx->refCount++;
+		DbgPrint("PostCreate RefCount: %d\n", pStreamCtx->refCount);
 
 	}
 	finally
 	{
-		if(pfNameInfo!=NULL)
+		if (pStreamCtx != NULL)
 		{
-			FltReleaseFileNameInformation(pfNameInfo);
+			FltReleaseContext(pStreamCtx);
 		}
 	}
-	
 
 	return FLT_POSTOP_FINISHED_PROCESSING;
 }
