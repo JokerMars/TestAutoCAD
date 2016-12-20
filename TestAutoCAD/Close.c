@@ -11,7 +11,7 @@ PreClose(
 {
 	try
 	{
-		if (!IsFilteredFileProcess(Data, FltObjects))
+		if (!IsFilteredFileProcess(Data, FltObjects,"IO_CLOSE"))
 		{
 			leave;
 		}

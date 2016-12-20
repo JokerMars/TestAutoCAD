@@ -2,6 +2,7 @@
 
 
 ULONG g_curProcessNameOffset = 0;
+UNICODE_STRING ext = { 0 };
 
 ULONG GetProcessNameOffset()
 {
@@ -35,7 +36,7 @@ PCHAR GetProcessName()
 }
 
 
-BOOLEAN IsFilteredFileProcess(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObjects)
+BOOLEAN IsFilteredFileProcess(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObjects,PCHAR IrpType)
 {
 	BOOLEAN isDir = FALSE;
 	NTSTATUS status;
@@ -80,16 +81,18 @@ BOOLEAN IsFilteredFileProcess(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS Flt
 		// we filter the dwg file type, don't care other's file type
 		//
 
-		UNICODE_STRING ext = { 0 };
-		RtlInitUnicodeString(&ext, L"dwg");
+		
 		if (RtlCompareUnicodeString(&ext, &(pfNameInfo->Extension), TRUE) != 0)
 		{
 			leave;
 		}
 
-		DbgPrint("Process: %s\n", procName);
-		DbgPrint("File Name: %wZ\n", &(pfNameInfo->Name));
-		DbgPrint("File Extension: %wZ\n", &(pfNameInfo->Extension));
+		DbgPrint("\n%s\n", IrpType);
+		DbgPrint("\tProcess: %s\n", procName);
+		DbgPrint("\tFile Name: %wZ\n", &(pfNameInfo->Name));
+		DbgPrint("\tFile Extension: %wZ\n", &(pfNameInfo->Extension));
+
+	
 
 		return TRUE;
 

@@ -1,6 +1,5 @@
 #include "CallbackRoutines.h"
 
-static int cnt = 0;
 
 
 FLT_PREOP_CALLBACK_STATUS
@@ -35,14 +34,12 @@ PostCreate(
 
 	try
 	{
-		isMonitored = IsFilteredFileProcess(Data, FltObjects);
+		isMonitored = IsFilteredFileProcess(Data, FltObjects,"IO_POST_CREATE");
 		if (!isMonitored)
 		{
 			leave;
 		}
 
-		DbgPrint("PostCreate: %d\n", cnt++);
-		
 		//
 		// find the stream context, if not, then create a new one
 		//
@@ -62,14 +59,28 @@ PostCreate(
 			SC_LOCK(pStreamCtx, &oldIrql);
 
 			pStreamCtx->refCount++;
-			DbgPrint("PostCreate RefCount: %d\n", pStreamCtx->refCount);
+			//DbgPrint("PostCreate RefCount: %d\n", pStreamCtx->refCount);
 
 			SC_UNLOCK(pStreamCtx, oldIrql);
 			leave;
 		}
 
 		pStreamCtx->refCount++;
-		DbgPrint("PostCreate RefCount: %d\n", pStreamCtx->refCount);
+		//DbgPrint("PostCreate RefCount: %d\n", pStreamCtx->refCount);
+
+		//
+		// get the file size
+		//
+
+		LARGE_INTEGER FileSize = { 0 };
+		status = File_GetFileSize(Data, FltObjects, &FileSize);
+		if (!NT_SUCCESS(status))
+		{
+			leave;
+		}
+
+		DbgPrint("PostCreate File Len: %d\n", FileSize.QuadPart);
+
 
 	}
 	finally

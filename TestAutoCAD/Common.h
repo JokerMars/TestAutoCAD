@@ -11,12 +11,13 @@
 
 
 extern ULONG g_curProcessNameOffset;
+extern UNICODE_STRING ext;
 
 ULONG GetProcessNameOffset();
 
 PCHAR GetProcessName();
 
-BOOLEAN IsFilteredFileProcess(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObjects);
+BOOLEAN IsFilteredFileProcess(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObjects,PCHAR IrpType);
 
 
 #endif

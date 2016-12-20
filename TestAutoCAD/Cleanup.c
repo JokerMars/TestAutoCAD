@@ -1,6 +1,6 @@
 #include "CallbackRoutines.h"
 
-static int cnt = 0;
+//static int cnt = 0;
 
 FLT_PREOP_CALLBACK_STATUS
 PreCleanup(
@@ -15,12 +15,12 @@ PreCleanup(
 
 	try
 	{
-		if (!IsFilteredFileProcess(Data, FltObjects))
+		if (!IsFilteredFileProcess(Data, FltObjects,"IO_CLEANUP"))
 		{
 			leave;
 		}
 
-		DbgPrint("PreCleanup: %d\n", cnt++);
+	/*	DbgPrint("PreCleanup: %d\n", cnt++);*/
 
 		//
 		// get the current stream context
@@ -37,12 +37,30 @@ PreCleanup(
 			SC_LOCK(pStreamCtx, &oldIrql);
 
 			pStreamCtx->refCount--;
-			DbgPrint("PreCleaup RefCount: %d\n", pStreamCtx->refCount);
+			//DbgPrint("PreCleaup RefCount: %d\n", pStreamCtx->refCount);
 
 			SC_UNLOCK(pStreamCtx, oldIrql);
 		}
 
-		
+		//
+		// get the file size
+		//
+
+		LARGE_INTEGER FileSize = { 0 };
+		status = File_GetFileSize(Data, FltObjects, &FileSize);
+		if (!NT_SUCCESS(status))
+		{
+			leave;
+		}
+
+		DbgPrint("PreCleanup File Len: %d\n", FileSize.QuadPart);
+
+
+		//
+		// clear the cache
+		//
+
+
 
 	}
 	finally

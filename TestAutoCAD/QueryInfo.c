@@ -19,7 +19,7 @@ PreQueryInfo(
 		// if the file and process is what we care, then go down
 		//
 
-		isMonitored = IsFilteredFileProcess(Data, FltObjects);
+		isMonitored = IsFilteredFileProcess(Data, FltObjects,"IO_PRE_QUERY_INFO");
 		if (!isMonitored)
 		{
 			leave;
