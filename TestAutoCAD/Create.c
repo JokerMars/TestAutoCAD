@@ -35,13 +35,13 @@ PostCreate(
 
 	try
 	{
-		isMonitored = IsFilteredFileProcess(Data, FltObjects);
+		isMonitored = IsFilteredWithInfo(Data, FltObjects,"IO_POST_CREATE");
 		if (!isMonitored)
 		{
 			leave;
 		}
 
-		DbgPrint("PostCreate: %d\n", cnt++);
+		DbgPrint("    PostCreate: %d\n", cnt++);
 		
 		//
 		// find the stream context, if not, then create a new one
@@ -62,14 +62,14 @@ PostCreate(
 			SC_LOCK(pStreamCtx, &oldIrql);
 
 			pStreamCtx->refCount++;
-			DbgPrint("PostCreate RefCount: %d\n", pStreamCtx->refCount);
+			DbgPrint("    PostCreate RefCount: %d\n", pStreamCtx->refCount);
 
 			SC_UNLOCK(pStreamCtx, oldIrql);
 			leave;
 		}
 
 		pStreamCtx->refCount++;
-		DbgPrint("PostCreate RefCount: %d\n", pStreamCtx->refCount);
+		DbgPrint("    PostCreate RefCount: %d\n", pStreamCtx->refCount);
 
 	}
 	finally

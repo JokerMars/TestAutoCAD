@@ -19,13 +19,13 @@ PreQueryInfo(
 		// if the file and process is what we care, then go down
 		//
 
-		isMonitored = IsFilteredFileProcess(Data, FltObjects);
+		isMonitored = IsFilteredWithInfo(Data, FltObjects, "IO_PRE_QUERY_INFO");
 		if (!isMonitored)
 		{
 			leave;
 		}
 
-		DbgPrint("PreQueryInfo: %d\n", cnt++);
+		DbgPrint("    PreQueryInfo: %d\n", cnt++);
 		
 		return FLT_PREOP_SUCCESS_WITH_CALLBACK;
 	}
