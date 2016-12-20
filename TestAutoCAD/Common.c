@@ -152,7 +152,12 @@ BOOLEAN IsFilteredWithInfo(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObj
 
 		UNICODE_STRING ext = { 0 };
 		RtlInitUnicodeString(&ext, L"dwg");
-		if (RtlCompareUnicodeString(&ext, &(pfNameInfo->Extension), TRUE) != 0)
+
+		UNICODE_STRING extBack = { 0 };
+		RtlInitUnicodeString(&extBack, L"bak");
+		
+		if (RtlCompareUnicodeString(&ext, &(pfNameInfo->Extension), TRUE) != 0 &&
+			RtlCompareUnicodeString(&extBack, &(pfNameInfo->Extension), TRUE) != 0)
 		{
 			leave;
 		}

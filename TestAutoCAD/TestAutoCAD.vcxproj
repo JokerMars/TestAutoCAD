@@ -35,6 +35,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Read.c" />
+    <ClCompile Include="Write.c" />
     <ResourceCompile Include="TestAutoCAD.rc" />
     <ClCompile Include="Cleanup.c" />
     <ClCompile Include="Close.c" />

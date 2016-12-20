@@ -45,6 +45,12 @@
     <ClCompile Include="Ctx.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Write.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TestAutoCAD.rc">

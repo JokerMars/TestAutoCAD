@@ -70,6 +70,7 @@ PostCreate(
 
 		pStreamCtx->refCount++;
 		DbgPrint("    PostCreate RefCount: %d\n", pStreamCtx->refCount);
+		DbgPrint("****PostCreate Write Len: %d\n", Data->Iopb->Parameters.Write.Length);
 
 	}
 	finally

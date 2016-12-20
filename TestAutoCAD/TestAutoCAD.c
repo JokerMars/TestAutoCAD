@@ -62,6 +62,20 @@ CONST FLT_OPERATION_REGISTRATION Callbacks[] = {
 		PostQueryInfo
 	},*/
 
+	{
+		IRP_MJ_WRITE,
+		0,
+		PreWrite,
+		PostWrite
+	},
+
+	{
+		IRP_MJ_READ,
+		0,
+		PreRead,
+		PostRead
+	},
+
 
     { IRP_MJ_OPERATION_END }
 };
