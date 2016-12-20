@@ -45,6 +45,18 @@
     <ClCompile Include="Ctx.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="File.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SetInfo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Read.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Write.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TestAutoCAD.rc">
@@ -62,6 +74,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ctx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="File.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
