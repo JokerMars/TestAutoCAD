@@ -19,13 +19,13 @@ PreQueryInfo(
 		// if the file and process is what we care, then go down
 		//
 
-		isMonitored = IsFilteredFileProcess(Data, FltObjects);
+		isMonitored = IsFilteredWithInfo(Data, FltObjects,"IO_PRE_QUERY_INFO");
 		if (!isMonitored)
 		{
 			leave;
 		}
 
-		DbgPrint("PreQueryInfo: %d\n", cnt++);
+		DbgPrint("    PreQueryInfo: %d\n", cnt++);
 		
 		return FLT_PREOP_SUCCESS_WITH_CALLBACK;
 	}
@@ -60,43 +60,43 @@ PostQueryInfo(
 		{
 			case FileAllInformation:
 			{
-				DbgPrint("FileAllInformation\n");
+				DbgPrint("    FileAllInformation\n");
 				break;
 			}
 
 			case FileAllocationInformation:
 			{
-				DbgPrint("FileAllocationInformation\n");
+				DbgPrint("    FileAllocationInformation\n");
 				break;
 			}
 
 			case FileValidDataLengthInformation:
 			{
-				DbgPrint("FileValidDataLengthInformation\n");
+				DbgPrint("    FileValidDataLengthInformation\n");
 				break;
 			}
 
 			case FileStandardInformation:
 			{
-				DbgPrint("FileStandardInformation\n");
+				DbgPrint("    FileStandardInformation\n");
 				break;
 			}
 
 			case FileEndOfFileInformation:
 			{
-				DbgPrint("FileEndOfFileInformation\n");
+				DbgPrint("    FileEndOfFileInformation\n");
 				break;
 			}
 
 			case FilePositionInformation:
 			{
-				DbgPrint("FilePositionInformation\n");
+				DbgPrint("    FilePositionInformation\n");
 				break;
 			}
 
 			case FileBasicInformation:
 			{
-				DbgPrint("FileBasicInformation\n");
+				DbgPrint("    FileBasicInformation\n");
 				break;
 			}
 

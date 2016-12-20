@@ -15,12 +15,12 @@ PreCleanup(
 
 	try
 	{
-		if (!IsFilteredFileProcess(Data, FltObjects))
+		if (!IsFilteredWithInfo(Data, FltObjects, "IO_PRE_CLEANUP"))
 		{
 			leave;
 		}
 
-		DbgPrint("PreCleanup: %d\n", cnt++);
+		DbgPrint("    PreCleanup: %d\n", cnt++);
 
 		//
 		// get the current stream context
@@ -37,7 +37,7 @@ PreCleanup(
 			SC_LOCK(pStreamCtx, &oldIrql);
 
 			pStreamCtx->refCount--;
-			DbgPrint("PreCleaup RefCount: %d\n", pStreamCtx->refCount);
+			DbgPrint("    PreCleaup RefCount: %d\n", pStreamCtx->refCount);
 
 			SC_UNLOCK(pStreamCtx, oldIrql);
 		}
