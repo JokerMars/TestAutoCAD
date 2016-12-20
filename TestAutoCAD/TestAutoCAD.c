@@ -62,6 +62,27 @@ CONST FLT_OPERATION_REGISTRATION Callbacks[] = {
 		PostQueryInfo
 	},*/
 
+	//{
+	//	IRP_MJ_SET_INFORMATION,
+	//	0,
+	//	PreSetInfo,
+	//	PostSetInfo
+	//},
+
+	{
+		IRP_MJ_READ,
+		0,
+		PreRead,
+		PostRead
+	},
+
+	{
+		IRP_MJ_WRITE,
+		0,
+		PreWrite,
+		PostWrite
+	},
+	
 
     { IRP_MJ_OPERATION_END }
 };
@@ -307,7 +328,7 @@ Return Value:
 	g_curProcessNameOffset = GetProcessNameOffset();
 	DbgPrint("Driver Entry: \n\t Process Name offset: %d\n", g_curProcessNameOffset);
 
-
+	RtlInitUnicodeString(&ext, L"dwg");
 
     //
     //  Register with FltMgr to tell it our callback routines
@@ -365,6 +386,12 @@ Return Value:
 
     PT_DBG_PRINT( PTDBG_TRACE_ROUTINES,
                   ("TestAutoCAD!TestAutoCADUnload: Entered\n") );
+
+	//
+	// TO Do my free work
+	//
+
+	RtlFreeUnicodeString(&ext);
 
     FltUnregisterFilter( gFilterHandle );
 
