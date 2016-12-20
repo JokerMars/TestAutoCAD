@@ -18,5 +18,6 @@ PCHAR GetProcessName();
 
 BOOLEAN IsFilteredFileProcess(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObjects);
 
+BOOLEAN IsFilteredWithInfo(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObjects, PCHAR info);
 
 #endif
