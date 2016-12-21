@@ -32,6 +32,8 @@ PostCreate(
 	PSTREAM_CONTEXT pStreamCtx = NULL;
 	BOOLEAN bNewCreated = FALSE;
 	KIRQL oldIrql;
+	PFLT_FILE_NAME_INFORMATION pfNameInfo = NULL;
+
 
 	try
 	{
@@ -48,6 +50,25 @@ PostCreate(
 		//
 
 		status = Ctx_FindOrCreateStreamContext(Data, FltObjects, TRUE, &pStreamCtx, &bNewCreated);
+		if (!NT_SUCCESS(status))
+		{
+			leave;
+		}
+
+		//
+		// update the file name
+		//
+
+		status = FltGetFileNameInformation(Data,
+			FLT_FILE_NAME_NORMALIZED | FLT_FILE_NAME_QUERY_DEFAULT,
+			&pfNameInfo);
+		if (!NT_SUCCESS(status) || pfNameInfo == NULL)
+		{
+			leave;
+		}
+		FltParseFileNameInformation(pfNameInfo);
+
+		status = Ctx_UpdateNameInStreamContext(&(pfNameInfo->Name), pStreamCtx);
 		if (!NT_SUCCESS(status))
 		{
 			leave;
@@ -71,6 +92,7 @@ PostCreate(
 		pStreamCtx->refCount++;
 		DbgPrint("    PostCreate RefCount: %d\n", pStreamCtx->refCount);
 		DbgPrint("****PostCreate Write Len: %d\n", Data->Iopb->Parameters.Write.Length);
+		
 
 	}
 	finally
@@ -78,6 +100,11 @@ PostCreate(
 		if (pStreamCtx != NULL)
 		{
 			FltReleaseContext(pStreamCtx);
+		}
+
+		if (pfNameInfo != NULL)
+		{
+			FltReleaseFileNameInformation(pfNameInfo);
 		}
 	}
 

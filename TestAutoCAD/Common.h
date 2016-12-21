@@ -9,6 +9,9 @@
 
 #pragma prefast(disable:__WARNING_ENCODE_MEMBER_FUNCTION_POINTER, "Not valid for kernel mode drivers")
 
+#define MONITOR_PROCESS		"notepad.exe"
+#define MONITOR_EXT			L"txt"
+
 
 extern ULONG g_curProcessNameOffset;
 

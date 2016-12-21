@@ -128,7 +128,7 @@ BOOLEAN IsFilteredWithInfo(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObj
 		//
 
 		PCHAR procName = GetProcessName();
-		if (strncmp(procName, "acad.exe", strlen("acad.exe")) != 0)
+		if (strncmp(procName, MONITOR_PROCESS, strlen(MONITOR_PROCESS)) != 0)
 		{
 			leave;
 		}
@@ -151,7 +151,7 @@ BOOLEAN IsFilteredWithInfo(PFLT_CALLBACK_DATA Data, PCFLT_RELATED_OBJECTS FltObj
 		//
 
 		UNICODE_STRING ext = { 0 };
-		RtlInitUnicodeString(&ext, L"dwg");
+		RtlInitUnicodeString(&ext, MONITOR_EXT);
 
 		UNICODE_STRING extBack = { 0 };
 		RtlInitUnicodeString(&extBack, L"bak");

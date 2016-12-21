@@ -15,13 +15,6 @@ PreCleanup(
 
 	try
 	{
-		if (!IsFilteredWithInfo(Data, FltObjects, "IO_PRE_CLEANUP"))
-		{
-			leave;
-		}
-
-		DbgPrint("    PreCleanup: %d\n", cnt++);
-
 		//
 		// get the current stream context
 		//
@@ -31,6 +24,20 @@ PreCleanup(
 		{
 			leave;
 		}
+		
+		//
+		// Get Process Name
+		//
+
+		PCHAR procName = GetProcessName();
+		if (procName == NULL)
+		{
+			leave;
+		}
+
+		DbgPrint("\nIO_PRE_CLEANUP\n");
+		DbgPrint("    Process Name: %s\n", procName);
+		DbgPrint("    File Name: %wZ\n", &(pStreamCtx->fileName));
 
 		if (pStreamCtx->refCount > 0)
 		{

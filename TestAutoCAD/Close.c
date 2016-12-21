@@ -9,18 +9,36 @@ PreClose(
 	_Flt_CompletionContext_Outptr_ PVOID *CompletionContext
 )
 {
+	NTSTATUS status;
+	PSTREAM_CONTEXT pStreamCtx = NULL;
+
 	try
 	{
-		if (!IsFilteredFileProcess(Data, FltObjects))
+		status = FltGetStreamContext(FltObjects->Instance, FltObjects->FileObject, &pStreamCtx);
+		if (!NT_SUCCESS(status) || pStreamCtx == NULL)
 		{
 			leave;
 		}
 
-		DbgPrint("PreClose: %d\n", cnt++);
+
+		PCHAR procName = GetProcessName();
+		if (procName == NULL)
+		{
+			leave;
+		}
+
+		DbgPrint("\nIO_PRE_CLOSE\n");
+		DbgPrint("    File Name: %wZ\n", &(pStreamCtx->fileName));
+		DbgPrint("    Process Name: %s\n", procName);
+		DbgPrint("    PreClose: %d\n", cnt++);
+	
 	}
 	finally
 	{
-
+		if (pStreamCtx != NULL)
+		{
+			FltReleaseContext(pStreamCtx);
+		}
 	}
 
 	return FLT_PREOP_SUCCESS_NO_CALLBACK;

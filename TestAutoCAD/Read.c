@@ -41,7 +41,7 @@ PostRead(
 	_In_ FLT_POST_OPERATION_FLAGS Flags
 )
 {
-	DbgPrint("IO_POST_READ\n");
+	DbgPrint("\nIO_POST_READ\n");
 	DbgPrint("    PostRead Len: %d\n", Data->IoStatus.Information);
 	return FLT_POSTOP_FINISHED_PROCESSING;
 }
