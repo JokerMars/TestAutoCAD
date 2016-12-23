@@ -12,6 +12,7 @@ PreCleanup(
 	NTSTATUS status;
 	PSTREAM_CONTEXT pStreamCtx = NULL;
 	KIRQL oldIrql;
+	PFLT_IO_PARAMETER_BLOCK iopb = Data->Iopb;
 
 	try
 	{
@@ -19,7 +20,7 @@ PreCleanup(
 		// get the current stream context
 		//
 
-		status = FltGetStreamContext(FltObjects->Instance, FltObjects->FileObject, &pStreamCtx);
+		status = FltGetStreamContext(iopb->TargetInstance, iopb->TargetFileObject, &pStreamCtx);
 		if (!NT_SUCCESS(status) || pStreamCtx == NULL)
 		{
 			leave;
@@ -34,20 +35,14 @@ PreCleanup(
 		{
 			leave;
 		}
+		if (strncmp(procName, MONITOR_PROCESS, strlen(MONITOR_PROCESS)) != 0)
+		{
+			leave;
+		}
 
 		DbgPrint("\nIO_PRE_CLEANUP\n");
 		DbgPrint("    Process Name: %s\n", procName);
 		DbgPrint("    File Name: %wZ\n", &(pStreamCtx->fileName));
-
-		if (pStreamCtx->refCount > 0)
-		{
-			SC_LOCK(pStreamCtx, &oldIrql);
-
-			pStreamCtx->refCount--;
-			DbgPrint("    PreCleaup RefCount: %d\n", pStreamCtx->refCount);
-
-			SC_UNLOCK(pStreamCtx, oldIrql);
-		}
 
 		
 

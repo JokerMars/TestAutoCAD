@@ -11,27 +11,45 @@ PreClose(
 {
 	NTSTATUS status;
 	PSTREAM_CONTEXT pStreamCtx = NULL;
+	KIRQL oldIrql;
+	PFLT_IO_PARAMETER_BLOCK iopb = Data->Iopb;
 
 	try
 	{
-		status = FltGetStreamContext(FltObjects->Instance, FltObjects->FileObject, &pStreamCtx);
+		status = FltGetStreamContext(iopb->TargetInstance, iopb->TargetFileObject, &pStreamCtx);
 		if (!NT_SUCCESS(status) || pStreamCtx == NULL)
 		{
 			leave;
 		}
-
 
 		PCHAR procName = GetProcessName();
 		if (procName == NULL)
 		{
 			leave;
 		}
+		if (strncmp(procName, MONITOR_PROCESS, strlen(MONITOR_PROCESS)) != 0)
+		{
+			leave;
+		}
+
 
 		DbgPrint("\nIO_PRE_CLOSE\n");
-		DbgPrint("    File Name: %wZ\n", &(pStreamCtx->fileName));
 		DbgPrint("    Process Name: %s\n", procName);
-		DbgPrint("    PreClose: %d\n", cnt++);
-	
+		DbgPrint("    File Name: %wZ\n", &(pStreamCtx->fileName));
+
+		SC_LOCK(pStreamCtx, &oldIrql);
+		if ((FltObjects->FileObject->Flags & FO_STREAM_FILE) != FO_STREAM_FILE)
+			pStreamCtx->refCount--;
+		DbgPrint("    PreClose RefCount: %d\n", pStreamCtx->refCount);
+		SC_UNLOCK(pStreamCtx, oldIrql);
+
+		if (pStreamCtx->refCount == 0)
+		{
+			DbgPrint("****Clear File Cache\n");
+			//FileCacheClear(FltObjects->FileObject);
+			//Cc_ClearFileCache(FltObjects->FileObject, TRUE, NULL, 0);
+		}
+
 	}
 	finally
 	{

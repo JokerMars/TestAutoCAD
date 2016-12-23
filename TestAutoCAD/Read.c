@@ -8,25 +8,51 @@ PreRead(
 )
 {
 
-	BOOLEAN isMonitored = FALSE;
+	NTSTATUS status;
 	PFLT_IO_PARAMETER_BLOCK iopb = Data->Iopb;
+	PSTREAM_CONTEXT pStreamCtx = NULL;
 
 
 	try
 	{
-		isMonitored = IsFilteredWithInfo(Data, FltObjects, "IO_PRE_READ");
-		if (!isMonitored)
+		//
+		// get the current stream context
+		//
+
+		status = FltGetStreamContext(iopb->TargetInstance, iopb->TargetFileObject, &pStreamCtx);
+		if (!NT_SUCCESS(status) || pStreamCtx == NULL)
 		{
 			leave;
 		}
 
+		//
+		// Get Process Name
+		//
+
+		PCHAR procName = GetProcessName();
+		if (procName == NULL)
+		{
+			leave;
+		}
+		if (strncmp(procName, MONITOR_PROCESS, strlen(MONITOR_PROCESS)) != 0)
+		{
+			leave;
+		}
+
+		DbgPrint("\nIO_PRE_READ\n");
+		DbgPrint("    File Name: %wZ\n", &(pStreamCtx->fileName));
+		DbgPrint("    Process Name: %s\n", procName);
+		DbgPrint("    PreWrite Len: %d\n", iopb->Parameters.Write.Length);
 		DbgPrint("    PreRead Len: %d\n", iopb->Parameters.Read.Length);
 
 		return FLT_PREOP_SUCCESS_WITH_CALLBACK;
 	}
 	finally
 	{
-
+		if (pStreamCtx != NULL)
+		{
+			FltReleaseContext(pStreamCtx);
+		}
 	}
 
 	return FLT_PREOP_SUCCESS_NO_CALLBACK;

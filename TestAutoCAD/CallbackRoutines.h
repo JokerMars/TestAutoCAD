@@ -5,6 +5,7 @@
 
 #include "Common.h"
 #include "Ctx.h"
+#include "Cache.h"
 
 /*
 *******Create routine*************

@@ -34,9 +34,10 @@ PostCreate(
 	KIRQL oldIrql;
 	PFLT_FILE_NAME_INFORMATION pfNameInfo = NULL;
 
-
 	try
 	{
+		
+
 		isMonitored = IsFilteredWithInfo(Data, FltObjects,"IO_POST_CREATE");
 		if (!isMonitored)
 		{
@@ -44,6 +45,7 @@ PostCreate(
 		}
 
 		DbgPrint("    PostCreate: %d\n", cnt++);
+		Cc_ClearFileCache(FltObjects->FileObject, TRUE, NULL, 0);
 		
 		//
 		// find the stream context, if not, then create a new one

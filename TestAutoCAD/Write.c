@@ -16,58 +16,29 @@ PreWrite(
 
 	try
 	{
-		/*status = FltGetStreamContext(FltObjects->Instance, FltObjects->FileObject, &pStreamCtx);
+		status = FltGetStreamContext(iopb->TargetInstance, iopb->TargetFileObject, &pStreamCtx);
 		if (!NT_SUCCESS(status) || pStreamCtx == NULL)
 		{
 			leave;
-		}*/
-
-		//
-		// test if there is some other process write dwg
-		//
-
-		BOOLEAN isDir;
-		status = FltIsDirectory(FltObjects->FileObject, FltObjects->Instance, &isDir);
-		if (!NT_SUCCESS(status) || isDir)
-		{
-			leave;
 		}
-
-		status = FltGetFileNameInformation(Data,
-			FLT_FILE_NAME_NORMALIZED | FLT_FILE_NAME_QUERY_DEFAULT,
-			&pfNameInfo);
-		if (!NT_SUCCESS(status) || pfNameInfo == NULL)
-		{
-			leave;
-		}
-		FltParseFileNameInformation(pfNameInfo);
-
-		UNICODE_STRING ext = { 0 };
-		RtlInitUnicodeString(&ext, MONITOR_EXT);
-		if (RtlCompareUnicodeString(&ext, &(pfNameInfo->Extension), TRUE) != 0)
-		{
-			leave;
-		}
-
+		
 
 		PCHAR procName = GetProcessName();
 		if (procName == NULL)
 		{
 			leave;
 		}
-
-
-
-	/*	if (strncmp(procName, MONITOR_PROCESS, strlen(MONITOR_PROCESS)) != 0)
+		if (strncmp(procName, MONITOR_PROCESS, strlen(MONITOR_PROCESS)) != 0)
 		{
 			leave;
-		}*/
+		}
 
 		DbgPrint("\nIO_PRE_WRITE\n");
-		//DbgPrint("    File Name: %wZ\n", &(pStreamCtx->fileName));
-		DbgPrint("    File Name: %wZ\n", &(pfNameInfo->Name));
+		DbgPrint("    File Name: %wZ\n", &(pStreamCtx->fileName));
+		//DbgPrint("    File Name: %wZ\n", &(pfNameInfo->Name));
 		DbgPrint("    Process Name: %s\n", procName);
 		DbgPrint("    PreWrite Len: %d\n", iopb->Parameters.Write.Length);
+		DbgPrint("    PreRead Len: %d\n", iopb->Parameters.Read.Length);
 
 		return FLT_PREOP_SUCCESS_WITH_CALLBACK;
 	}

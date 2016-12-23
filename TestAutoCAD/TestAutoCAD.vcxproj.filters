@@ -51,6 +51,9 @@
     <ClCompile Include="Read.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Cache.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="TestAutoCAD.rc">
@@ -68,6 +71,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Ctx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cache.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
